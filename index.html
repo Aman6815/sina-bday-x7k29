@@ -155,7 +155,7 @@ q:[["መጀመሪያ የት ተገናኘን?",["መብራተ ሃይል ትምህ
 }};
 let lang='en',gi=0,qi=0,cur=0,spins=[],left=3,spinning=false,wr=0;
 const $=id=>document.getElementById(id),T=k=>L[lang][k];
-const PRIZES=[50,100,150,300,500,1000],COL=['#f3c969','#b66cf0','#e08ad8','#7b3fd1','#d9a93f','#4b1d8f'],N=6,SEG=360/N,WIN=3; // only the first 3 (50,100,150) can win
+const PRIZES=[50,100,150,200,300,500],COL=['#f3c969','#b66cf0','#e08ad8','#7b3fd1','#d9a93f','#4b1d8f'],N=6,SEG=360/N,WIN=4; // only the first 4 (50,100,150,200) can win
 let hist=[0];
 function go(n,bk){document.querySelectorAll('.s').forEach(s=>s.classList.remove('on'));$('s'+n).classList.add('on');if(!bk&&hist[hist.length-1]!=n)hist.push(n);$('back').classList.toggle('hide',n<2);window.scrollTo(0,0)}
 function goBack(){if(spinning||hist.length<2)return;hist.pop();go(hist[hist.length-1],1)}
@@ -188,7 +188,7 @@ const cv=$('wheel'),cx=cv.getContext('2d');
 (function(){const r=300,a=2*Math.PI/N;PRIZES.forEach((p,i)=>{cx.beginPath();cx.moveTo(r,r);cx.arc(r,r,r,-Math.PI/2+i*a,-Math.PI/2+(i+1)*a);cx.fillStyle=COL[i];cx.fill();cx.save();cx.translate(r,r);cx.rotate(-Math.PI/2+(i+.5)*a);cx.fillStyle=(i==0||i==4)?'#2a1050':'#fff';cx.font='bold 50px Nunito,sans-serif';cx.textAlign='right';cx.fillText(p,r-40,18);cx.restore()})})();
 function wheelTxt(){$('spinP').textContent=left>0?T('spinN')(left):''}
 function spin(){if(spinning||left<1)return;spinning=true;$('last').textContent='';$('back').classList.add('hide');
- const i=Math.floor(Math.random()*WIN); // ONLY 50, 100 or 150
+ const W=[30,30,30,10],r=Math.random()*100;let i=0,acc=0;for(;i<WIN-1;i++){acc+=W[i];if(r<acc)break;} // 50/100/150 equal, 200 rare (10%) // ONLY 50, 100, 150 or 200
  wr=(Math.floor(wr/360)+6)*360-(i*SEG+SEG/2)+(Math.random()*30-15);
  cv.style.transform=`rotate(${wr}deg)`;
  const k=Math.floor((((-wr)%360)+360)%360/SEG); // segment really under the pointer
